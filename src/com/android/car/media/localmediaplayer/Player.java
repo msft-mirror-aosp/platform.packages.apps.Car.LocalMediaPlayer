@@ -319,7 +319,7 @@ public class Player extends MediaSession.Callback {
             return;
         }
 
-        mQueue = queue;
+        mQueue = new ArrayList<>(queue);
         mCurrentQueueIdx = foundIdx;
         QueueItem current = mQueue.get(mCurrentQueueIdx);
         String path = current.getDescription().getExtras().getString(DataModel.PATH_KEY);
@@ -356,6 +356,7 @@ public class Player extends MediaSession.Callback {
                 .setStyle(new Notification.MediaStyle().setMediaSession(mSession.getSessionToken()))
                 .setContentTitle(current.getTitle())
                 .setContentText(current.getSubtitle())
+                .setShowWhen(false)
                 .build();
         notification.flags |= Notification.FLAG_NO_CLEAR;
         mNotificationManager.notify(NOTIFICATION_ID, notification);
@@ -546,16 +547,9 @@ public class Player extends MediaSession.Callback {
 
     @Override
     public void onSkipToQueueItem(long id) {
-        int idx = (int) id;
-        MediaSession.QueueItem item = mQueue.get(idx);
-        MediaDescription description = item.getDescription();
-
-        String path = description.getExtras().getString(DataModel.PATH_KEY);
-        MediaMetadata metadata = mDataModel.getMetadata(description.getMediaId());
-
         try {
-            play(path, metadata);
-            mCurrentQueueIdx = idx;
+            mCurrentQueueIdx = (int) id;
+            playCurrentQueueIndex();
         } catch (IOException e) {
             Log.e(TAG, "Failed to play.", e);
             mSession.setPlaybackState(mErrorState);
