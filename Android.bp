@@ -26,11 +26,6 @@ java_library {
         type: "nano",
         local_include_dirs: ["proto"],
     },
-    product_variables: {
-        pdk: {
-            enabled: false,
-        },
-    },
 }
 
 // Actual Package
@@ -42,6 +37,8 @@ android_app {
     platform_apis: true,
     certificate: "platform",
     privileged: true,
+    min_sdk_version: "26",
+    target_sdk_version: "current",
     static_libs: [
         "LocalMediaPlayer-proto",
         "androidx.legacy_legacy-support-v4",
@@ -51,10 +48,5 @@ android_app {
     },
     dex_preopt: {
         enabled: false,
-    },
-    product_variables: {
-        pdk: {
-            enabled: false,
-        },
     },
 }
