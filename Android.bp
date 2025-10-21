@@ -49,4 +49,7 @@ android_app {
     dex_preopt: {
         enabled: false,
     },
+    lint: {
+        baseline_filename: "lint-baseline.xml",
+    },
 }
